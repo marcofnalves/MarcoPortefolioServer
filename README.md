@@ -8,8 +8,6 @@ This is the server component of the Marco Portfolio application, which serves po
 - Endpoint to Curriculum Vitae (CV)
 - Endpoint to Projects
 - Endpoint to Versionations
-
-Environment variable configuration using dotenv
 ## Prerequisites
 - SQLLite Storage Data
 - Postman or any API testing tool (optional, for testing the API)
