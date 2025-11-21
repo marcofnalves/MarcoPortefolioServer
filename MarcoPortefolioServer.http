@@ -1,0 +1,6 @@
+@MarcoPortefolioServer_HostAddress = http://localhost:5206
+
+GET {{MarcoPortefolioServer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
