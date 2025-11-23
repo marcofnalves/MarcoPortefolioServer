@@ -1,5 +1,6 @@
 ﻿using MarcoPortefolioServer.Functions.v1;
 using MarcoPortefolioServer.Functions.v1.modules.server;
+using MarcoPortefolioServer.Models.fivem;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -23,10 +24,25 @@ namespace MarcoPortefolioServer.Controllers.v1.fivem
         }
 
         // GET api/v1/version
-        [HttpGet("coming")]
-        public ActionResult<string> comingsoon()
+        [HttpPost("newWhitelist")]
+        public ActionResult<string> newWhitelist([FromHeader] string token, WhitelistModel whitelist)
         {
-            string response = "Coming Soon...";
+            if (!_tokenValidator.IsValid(tokenController, token))
+            {
+                return Unauthorized(new
+                {
+                    valid = false,
+                    StatusCode = 401,
+                    message = "Token inválido!"
+                });
+            }
+
+            string? license = whitelist.license;
+            string? discord = whitelist.discord;
+            string? steam = whitelist.steam;
+            string? license2 = whitelist.license2;
+
+            var response = _server.NewWhitelist(license, license2, steam, discord);
             return Ok(response);
         }
     }

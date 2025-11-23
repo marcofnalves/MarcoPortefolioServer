@@ -46,9 +46,12 @@ namespace MarcoPortefolioServer.Repository.v1
         }
 
         // GET
-        public VersionModel? GetLastVersion()
+        public int GetLastVersion()
         {
-            return _versions.OrderByDescending(v => v.id_version).FirstOrDefault();
+            return _versions
+                .OrderByDescending(v => v.id_version)
+                .Select(v => v.id_version)
+                .FirstOrDefault();
         }
 
         public VersionModel? GetVersionById(int id)

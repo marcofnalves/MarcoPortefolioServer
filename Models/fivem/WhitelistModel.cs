@@ -1,6 +1,6 @@
 ﻿namespace MarcoPortefolioServer.Models.fivem
 {
-    public class Whitelist
+    public class WhitelistModel
     {
         public string license { get; set; } = string.Empty;
         public string license2 { get; set; } = string.Empty;

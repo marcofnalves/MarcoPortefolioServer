@@ -5,6 +5,7 @@ using MarcoPortefolioServer.Models.v1.DataModel;
 using MarcoPortefolioServer.Repository.v1;
 using Microsoft.AspNetCore.Mvc;
 using MarcoPortefolioServer.Models.v1;
+using System.Text.Json;
 
 namespace MarcoPortefolioServer.Controllers.v1.version
 {
@@ -39,8 +40,48 @@ namespace MarcoPortefolioServer.Controllers.v1.version
                     message = "Token inválido!"
                 });
             }
-            DataModel? last = _server.getSData("version").LastOrDefault();
-            return Ok(last);
+
+            DataModel[] dataArray = _server.getSData("versions");
+            List<VersionModel> list = new List<VersionModel>();
+            foreach (var data in dataArray)
+            {
+                if (data.dvalue.Length == 0)
+                    continue;
+
+                string json = data.dvalue[0];
+                var myInfo = JsonSerializer.Deserialize<VersionModel>(json);
+
+                if (myInfo != null)
+                    list.Add(myInfo);
+            }               
+            return Ok(list);
+        }
+
+        [HttpGet("allVersions")]
+        public ActionResult<VersionModel> getAllVersions(
+            [FromHeader] string token)
+        {
+            if (!_tokenValidator.IsValid(tokenController, token))
+            {
+                return Unauthorized(new
+                {
+                    valid = false,
+                    StatusCode = 401,
+                    message = "Token inválido!"
+                });
+            }
+            DataModel[] dataArray = _server.getSData("versions");
+            List<VersionModel> list = new List<VersionModel>();
+            foreach (var data in dataArray)
+            {
+                if (data.dvalue.Length == 0)
+                    continue;
+                string json = data.dvalue[0];
+                var myInfo = JsonSerializer.Deserialize<VersionModel>(json);
+                if (myInfo != null)
+                    list.Add(myInfo);
+            }
+            return Ok(list);
         }
 
         [HttpPost("newVersion")]
@@ -59,11 +100,10 @@ namespace MarcoPortefolioServer.Controllers.v1.version
                     message = "Token inválido!"
                 });
             }
-            var lastVersion = _versionRepo.GetLastVersion();
-            int newIdVersion = lastVersion.id_version + 1;
+            int lastVersion = _versionRepo.GetLastVersion()+1;
             VersionModel newVersion = new VersionModel
             {
-                id_version = newIdVersion,
+                id_version = lastVersion,
                 version = version,
                 name = name,
                 description = description
