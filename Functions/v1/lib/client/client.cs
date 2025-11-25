@@ -4,7 +4,7 @@ using MarcoPortefolioServer.Repository.v1.DataRepository;
 using System.Text.Json;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace MarcoPortefolioServer.Functions.v1.modules.client
+namespace MarcoPortefolioServer.Functions.v1.lib.client
 {
     public class Client
     {

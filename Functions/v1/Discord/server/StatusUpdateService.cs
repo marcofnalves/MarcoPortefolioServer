@@ -1,18 +1,19 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using MarcoPortefolioServer.Functions.v1.modules.server;
-using MarcoPortefolioServer.Functions.v1.modules.server.Discord.Commands;
+using MarcoPortefolioServer.Functions.v1.lib.server;
 using Microsoft.Extensions.Configuration;
+using HttpRequest = MarcoPortefolioServer.Functions.v1.lib.server.HttpRequest;
 
-namespace MarcoPortefolioServer.Functions.v1.modules.server.Discord
+namespace MarcoPortefolioServer.Functions.v1.Discord.server
 {
     public class StatusUpdateService
     {
         private readonly DiscordSocketClient _client;
         private readonly IConfiguration _config;
 
-        private readonly ulong _channelId;
-        private readonly ulong _guildId;
+        protected readonly ulong _channelId;
+        protected readonly ulong _guildId;
+        protected readonly string _serverType;
 
         private ulong _messageId;
 
@@ -21,9 +22,17 @@ namespace MarcoPortefolioServer.Functions.v1.modules.server.Discord
             _client = client;
             _config = config;
 
-            _channelId = ulong.Parse(_config["Discord:StatusChannelId"]!);
-            _guildId = ulong.Parse(_config["Discord:GuildId"]!);
-            _messageId = ulong.Parse(_config["Discord:StatusMessageId"] ?? "0");
+            // DEV ou PRD
+            _serverType = _config["System:type"]!;
+
+            // Buscar com base no tipo
+            _channelId = ulong.Parse(_config[$"Discord:{_serverType}:StatusChannelId"]!);
+            _guildId = ulong.Parse(_config[$"Discord:{_serverType}:GuildId"]!);
+
+            // Se não existir, fica 0
+            _messageId = ulong.TryParse(_config[$"Discord:{_serverType}:StatusMessageId"], out var mid)
+                ? mid
+                : 0;
         }
 
         public async Task StartAsync()
@@ -61,7 +70,7 @@ namespace MarcoPortefolioServer.Functions.v1.modules.server.Discord
             try
             {
                 serverStatus = await HttpRequest.GetAsync<ServerStatusModel>(
-                    "http://26.186.223.111:30120/dynamic.json",
+                    $"http://{_config["FivemServer:Ip"]}:{_config["FivemServer:Port"]}/dynamic.json",
                     log: false
                 );
 
@@ -123,7 +132,7 @@ namespace MarcoPortefolioServer.Functions.v1.modules.server.Discord
             var json = File.ReadAllText(path);
 
             dynamic data = Newtonsoft.Json.Linq.JObject.Parse(json);
-            data["Discord"]["StatusMessageId"] = id.ToString();
+            data["Discord"][_serverType]["StatusMessageId"] = id.ToString();
 
             File.WriteAllText(path, data.ToString());
         }

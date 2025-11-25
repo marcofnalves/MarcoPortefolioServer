@@ -1,9 +1,9 @@
-﻿using MarcoPortefolioServer.Functions.v1;
-using MarcoPortefolioServer.Functions.v1.modules.server;
+﻿using MarcoPortefolioServer.Functions.v1.framework.server;
+using MarcoPortefolioServer.Functions.v1.framework.client;
+using MarcoPortefolioServer.Functions.v1.lib.server;
+using MarcoPortefolioServer.Functions.v1.lib.client;
 using MarcoPortefolioServer.Models.fivem;
-using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace MarcoPortefolioServer.Controllers.v1.fivem
 {
@@ -23,9 +23,8 @@ namespace MarcoPortefolioServer.Controllers.v1.fivem
             _server = server;
         }
 
-        // GET api/v1/version
         [HttpPost("newWhitelist")]
-        public ActionResult<string> newWhitelist([FromHeader] string token, WhitelistModel whitelist)
+        public async Task<ActionResult<object>> newWhitelist([FromHeader] string token, WhitelistModel whitelist)
         {
             if (!_tokenValidator.IsValid(tokenController, token))
             {
@@ -42,8 +41,25 @@ namespace MarcoPortefolioServer.Controllers.v1.fivem
             string? steam = whitelist.steam;
             string? license2 = whitelist.license2;
 
-            var response = _server.NewWhitelist(license, license2, steam, discord);
-            return Ok(response);
+            object result = null;
+
+            await Task.Run(() =>
+            {
+                TriggerClientCallbackInternal("client:setWhitelist", new object[] { license, discord, steam, license2 }, (callbackResult) =>
+                {
+                    Console.WriteLine(callbackResult.ToString());
+                    result = callbackResult;
+                });
+            });
+
+            if (result != null)
+            {
+                return Ok(new { message = "Whitelist adicionada com sucesso", data = result });
+            }
+            else
+            {
+                return BadRequest(new { message = "Falha ao adicionar whitelist" });
+            }
         }
     }
 }

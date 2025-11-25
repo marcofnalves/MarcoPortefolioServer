@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
 
-namespace MarcoPortefolioServer.Functions.v1.modules.server
+namespace MarcoPortefolioServer.Functions.v1.lib.server
 {
     public class HttpRequest
     {

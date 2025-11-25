@@ -1,14 +1,13 @@
 using Auth0.ManagementApi.Models.Keys;
 using MarcoPortefolioServer;
-using MarcoPortefolioServer.Functions.v1;
-using MarcoPortefolioServer.Functions.v1.modules.client;
-using MarcoPortefolioServer.Functions.v1.modules.server;
+using MarcoPortefolioServer.Functions.v1.lib.server;
+using MarcoPortefolioServer.Functions.v1.lib.client;
 using MarcoPortefolioServer.Models.v1;
 using MarcoPortefolioServer.Models.v1.CurriculoModels;
 using MarcoPortefolioServer.Models.v1.DataModel;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
-using static MarcoPortefolioServer.Functions.v1.Age;
+using static MarcoPortefolioServer.Functions.v1.lib.server.Age;
 
 namespace MarcoPortefolioServer.Controllers.v1
 {

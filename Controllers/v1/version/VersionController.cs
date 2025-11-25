@@ -1,6 +1,5 @@
 ﻿using Auth0.AspNetCore.Authentication;
-using MarcoPortefolioServer.Functions.v1;
-using MarcoPortefolioServer.Functions.v1.modules.server;
+using MarcoPortefolioServer.Functions.v1.lib.server;
 using MarcoPortefolioServer.Models.v1.DataModel;
 using MarcoPortefolioServer.Repository.v1;
 using Microsoft.AspNetCore.Mvc;

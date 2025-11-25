@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace MarcoPortefolioServer.Functions.v1
+namespace MarcoPortefolioServer.Functions.v1.lib.server
 {
     public class TokenValidator
     {

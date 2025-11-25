@@ -1,21 +1,24 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using MarcoPortefolioServer.Functions.v1.modules.server.Discord.Utils;
-using MarcoPortefolioServer.Functions.v1.modules.server.Discord; // <- IMPORTANTE
+using MarcoPortefolioServer.Functions.v1.Discord.server.Utils;
+using MarcoPortefolioServer.Functions.v1.Discord;
 using Microsoft.Extensions.Configuration;
 using System;
+using MarcoPortefolioServer.Functions.v1.lib.server;
 
-namespace MarcoPortefolioServer.Functions.v1.modules.server.Discord
+namespace MarcoPortefolioServer.Functions.v1.Discord.server
 {
     public class DiscordBot
     {
         private readonly DiscordSocketClient _client;
+        private readonly Server _server;
         private readonly string _token;
         private readonly IConfiguration _config;
 
-        public DiscordBot(string token)
+        public DiscordBot(string token, Server server = null)
         {
             _token = token;
+            _server = server;
 
             // Carregar config (appsettings.json)
             _config = new ConfigurationBuilder()
@@ -66,6 +69,11 @@ namespace MarcoPortefolioServer.Functions.v1.modules.server.Discord
 
             var statusService = new StatusUpdateService(_client, _config);
             _ = statusService.StartAsync(); // fire & forget
+
+            RegisterServerEventInternal("DiscordClientReady", () =>
+            {
+                Console.WriteLine("Recebi o Trigger");
+            });
         }
 
         private async Task HandleSlashCommand(SocketSlashCommand cmd)

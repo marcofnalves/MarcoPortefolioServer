@@ -1,7 +1,6 @@
 ﻿using Auth0.ManagementApi.Models;
 using MarcoPortefolioServer.Controllers.v1.tokens;
-using MarcoPortefolioServer.Functions.v1;
-using MarcoPortefolioServer.Functions.v1.modules.client;
+using MarcoPortefolioServer.Functions.v1.lib.server;
 using MarcoPortefolioServer.Models.fivem;
 using MarcoPortefolioServer.Models.v1;
 using MarcoPortefolioServer.Models.v1.CurriculoModels;
@@ -13,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using Client = MarcoPortefolioServer.Functions.v1.modules.client.Client;
+using Client = MarcoPortefolioServer.Functions.v1.lib.client.Client;
 
 namespace MarcoPortefolioServer.Controllers.v1.curriculo
 {

@@ -1,4 +1,5 @@
-﻿using MarcoPortefolioServer.Models.v1;
+﻿using MarcoPortefolioServer.Functions.v1.lib.server;
+using MarcoPortefolioServer.Models.v1;
 
 namespace MarcoPortefolioServer.Repository.v1
 {
@@ -19,7 +20,7 @@ namespace MarcoPortefolioServer.Repository.v1
                     infoModel.name = reader.GetString(0);
                     var dateOfBirthString = reader.GetString(1);
                     infoModel.dateOfBirth = DateOnly.Parse(dateOfBirthString);
-                    infoModel.age = Functions.v1.Age.CalcularIdade(infoModel.dateOfBirth);
+                    infoModel.age = Age.CalcularIdade(infoModel.dateOfBirth);
                 }
             }
             return infoModel;
@@ -48,7 +49,7 @@ namespace MarcoPortefolioServer.Repository.v1
                     infoModel.name = reader.GetString(0);
                     var dateOfBirthString = reader.GetString(1);
                     infoModel.dateOfBirth = DateOnly.Parse(dateOfBirthString);
-                    infoModel.age = Functions.v1.Age.CalcularIdade(infoModel.dateOfBirth);
+                    infoModel.age = Age.CalcularIdade(infoModel.dateOfBirth);
                 }
             }
             return infoModel;

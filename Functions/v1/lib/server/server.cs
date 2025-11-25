@@ -1,11 +1,12 @@
-﻿using MarcoPortefolioServer.Functions.v1.modules.server.Discord;
+﻿using MarcoPortefolioServer.Functions.v1.Discord.server;
 using MarcoPortefolioServer.Models.fivem;
 using MarcoPortefolioServer.Models.v1;
 using MarcoPortefolioServer.Models.v1.DataModel;
 using MarcoPortefolioServer.Repository.v1.DataRepository;
+using System.ComponentModel;
 using System.Text.Json;
 
-namespace MarcoPortefolioServer.Functions.v1.modules.server
+namespace MarcoPortefolioServer.Functions.v1.lib.server
 {
     public class Server
     {
@@ -84,7 +85,22 @@ namespace MarcoPortefolioServer.Functions.v1.modules.server
             return newData;
         }
 
-        public void NewWhitelist(string license, string license2, string steamId, string discordId)
+        public WhitelistModel GetExistingWhitelist(string license)
+        {
+            var existing = Repository.v1.fivem.NewWhitelist.GetByLicense(license);
+
+            if (existing != null)
+            {
+                return existing;
+            } 
+            else
+            {
+                Console.WriteLine("Não existe whitelist para este license.");
+                return new WhitelistModel();
+            }
+        }
+
+        public WhitelistModel NewWhitelist(string license, string license2, string steamId, string discordId)
         {
             // 1. Verificar se já existe
             var existing = Repository.v1.fivem.NewWhitelist.GetByLicense(license);
@@ -92,7 +108,7 @@ namespace MarcoPortefolioServer.Functions.v1.modules.server
             if (existing != null)
             {
                 Console.WriteLine("Já existe whitelist para este license.");
-                return;
+                return existing;
             }
 
             // 2. Adicionar à whitelist em memória
@@ -116,10 +132,10 @@ namespace MarcoPortefolioServer.Functions.v1.modules.server
             setSData("whitelists", list.ToArray());
 
             Console.WriteLine("Whitelist adicionada com sucesso!");
+            return newWhitelist;
         }
 
         public void UpdateWhitelist(
-            int id_data,
             string license,
             string license2,
             string steamId,
@@ -223,5 +239,6 @@ namespace MarcoPortefolioServer.Functions.v1.modules.server
 
             Console.WriteLine("Whitelist removida com sucesso!");
         }
-    }
+    };
+
 }

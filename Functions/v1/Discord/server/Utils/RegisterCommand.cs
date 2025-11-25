@@ -1,26 +1,28 @@
 ﻿using Discord.WebSocket;
-using MarcoPortefolioServer.Functions.v1.modules.server.Discord.Commands;
+using MarcoPortefolioServer.Functions.v1.Discord.server.Commands;
+using MarcoPortefolioServer.Functions.v1.lib.server;
 
-namespace MarcoPortefolioServer.Functions.v1.modules.server.Discord.Utils
+namespace MarcoPortefolioServer.Functions.v1.Discord.server.Utils
 {
     public class RegisterCommand
     {
-        private readonly DiscordSocketClient _client;
+        private readonly DiscordSocketClient _DiscordClient;
 
         // Lista de comandos suportados
         public readonly List<ICommand> Commands = new();
 
-        public RegisterCommand(DiscordSocketClient client)
+        public RegisterCommand(DiscordSocketClient DiscordClient)
         {
-            _client = client;
+            _DiscordClient = DiscordClient;
 
             Commands.Add(new SayCommand());
+            Commands.Add(new WhitelistCommand());
         }
 
         // Registar todos os comandos nos guilds
         public async Task RegisterAll()
         {
-            foreach (var guild in _client.Guilds)
+            foreach (var guild in _DiscordClient.Guilds)
             {
                 foreach (var cmd in Commands)
                 {

@@ -3,7 +3,7 @@ using System.IO;
 using Microsoft.Data.Sqlite;
 using MarcoPortefolioServer.Models.v1;
 
-namespace MarcoPortefolioServer.Functions.v1
+namespace MarcoPortefolioServer.Functions.v1.lib.server
 {
     public static class DbInitializer
     {

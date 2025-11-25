@@ -1,7 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
 
-namespace MarcoPortefolioServer.Functions.v1.modules.server.Discord.Commands
+namespace MarcoPortefolioServer.Functions.v1.Discord.server.Commands
 {
     public interface ICommand
     {
